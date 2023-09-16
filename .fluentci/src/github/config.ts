@@ -33,8 +33,12 @@ export function generateYaml(): Workflow {
         run: setupDagger,
       },
       {
-        name: "Run Dagger Pipelines",
-        run: "dagger run fluentci netlify_pipeline",
+        name: "Build",
+        run: "fluentci run . build",
+      },
+      {
+        name: "Deploy",
+        run: "fluentci run . deploy",
         env: {
           NETLIFY_AUTH_TOKEN: "${{ secrets.NETLIFY_AUTH_TOKEN }}",
           NETLIFY_SITE_ID: "${{ vars.NETLIFY_SITE_ID }}",
