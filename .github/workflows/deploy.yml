@@ -20,10 +20,8 @@ jobs:
             curl -L https://dl.dagger.io/dagger/install.sh | DAGGER_VERSION=0.8.1 sh
             sudo mv bin/dagger /usr/local/bin
             dagger version
-      - name: Build
-        run: fluentci run . build
-      - name: Deploy
-        run: fluentci run . deploy
+      - name: Run Dagger Pipelines
+        run: fluentci run . build deploy
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID }}

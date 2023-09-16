@@ -18,6 +18,7 @@ export const build = async (client: Client, src = ".") => {
       client.cacheVolume("bun-cache")
     )
     .withMountedCache("/app/node_modules", client.cacheVolume("node_modules"))
+    .withMountedCache("/app/dist", client.cacheVolume("netlify-dist"))
     .withDirectory("/app", context, { exclude })
     .withWorkdir("/app")
     .withExec(["sh", "-c", 'eval "$(devbox global shellenv)" && bun install'])
@@ -28,8 +29,6 @@ export const build = async (client: Client, src = ".") => {
     ]);
 
   const result = await ctr.stdout();
-
-  await ctr.directory("/app/dist").export("./dist");
 
   console.log(result);
 };
@@ -64,6 +63,7 @@ export const deploy = async (client: Client, src = ".") => {
       client.cacheVolume("bun-cache")
     )
     .withMountedCache("/app/node_modules", client.cacheVolume("node_modules"))
+    .withMountedCache("/app/dist", client.cacheVolume("netlify-dist"))
     .withEnvVariable("NETLIFY_AUTH_TOKEN", Deno.env.get("NETLIFY_AUTH_TOKEN")!)
     .withEnvVariable("NETLIFY_SITE_ID", Deno.env.get("NETLIFY_SITE_ID")!)
     .withDirectory("/app", context, { exclude })
