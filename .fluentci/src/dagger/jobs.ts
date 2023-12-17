@@ -25,7 +25,15 @@ export async function build(
       .pipeline(Job.build)
       .container()
       .from("pkgxdev/pkgx:latest")
-      .withExec(["pkgx", "install", "node@18.19.0", "bun"])
+      .withExec(["apt-get", "update"])
+      .withExec([
+        "apt-get",
+        "install",
+        "-y",
+        "ca-certificates",
+        "build-essential",
+      ])
+      .withExec(["pkgx", "install", "node@18.19.0", "bun", "git"])
       .withMountedCache(
         "/root/.bun/install/cache",
         client.cacheVolume("bun-cache")
@@ -33,8 +41,8 @@ export async function build(
       .withMountedCache("/app/node_modules", client.cacheVolume("node_modules"))
       .withDirectory("/app", context, { exclude })
       .withWorkdir("/app")
-      .withExec(["bun", "install"])
-      .withExec(["bun", "run", "build"])
+      .withExec(["bash", "-c", "bun install"])
+      .withExec(["bash", "-c", "bun run build"])
       .withExec(["cp", "-r", "/app/dist", "/dist"]);
 
     await ctr.stdout();
@@ -91,6 +99,13 @@ export async function deploy(
       .pipeline(Job.deploy)
       .container()
       .from("pkgxdev/pkgx:latest")
+      .withExec([
+        "apt-get",
+        "install",
+        "-y",
+        "ca-certificates",
+        "build-essential",
+      ])
       .withExec(["pkgx", "install", "node@18.19.0", "bun", "git"])
       .withMountedCache(
         "/root/.bun/install/cache",
