@@ -34,11 +34,7 @@ export async function build(
       .withDirectory("/app", context, { exclude })
       .withWorkdir("/app")
       .withExec(["bun", "install"])
-      .withExec([
-        "sh",
-        "-c",
-        'eval "$(devbox global shellenv)" && bun run build',
-      ])
+      .withExec(["bun", "run", "build"])
       .withExec(["cp", "-r", "/app/dist", "/dist"]);
 
     await ctr.stdout();
@@ -95,7 +91,7 @@ export async function deploy(
       .pipeline(Job.deploy)
       .container()
       .from("pkgxdev/pkgx:latest")
-      .withExec(["pkgx", "install", "node@18.16.1", "bun"])
+      .withExec(["pkgx", "install", "node@18.16.1", "bun", "git"])
       .withMountedCache(
         "/root/.bun/install/cache",
         client.cacheVolume("bun-cache")
