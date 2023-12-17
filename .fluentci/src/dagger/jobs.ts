@@ -25,7 +25,7 @@ export async function build(
       .pipeline(Job.build)
       .container()
       .from("pkgxdev/pkgx:latest")
-      .withExec(["pkgx", "install", "node@18.16.1", "bun"])
+      .withExec(["pkgx", "install", "node@18.19.0", "bun"])
       .withMountedCache(
         "/root/.bun/install/cache",
         client.cacheVolume("bun-cache")
@@ -91,7 +91,7 @@ export async function deploy(
       .pipeline(Job.deploy)
       .container()
       .from("pkgxdev/pkgx:latest")
-      .withExec(["pkgx", "install", "node@18.16.1", "bun", "git"])
+      .withExec(["pkgx", "install", "node@18.19.0", "bun", "git"])
       .withMountedCache(
         "/root/.bun/install/cache",
         client.cacheVolume("bun-cache")
