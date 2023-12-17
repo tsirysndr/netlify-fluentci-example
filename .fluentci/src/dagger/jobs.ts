@@ -33,7 +33,7 @@ export async function build(
         "ca-certificates",
         "build-essential",
       ])
-      .withExec(["pkgx", "install", "node@18.19.0", "bun", "git"])
+      .withExec(["pkgx", "install", "node@18.19.0", "bun@1.0.0", "git"])
       .withMountedCache(
         "/root/.bun/install/cache",
         client.cacheVolume("bun-cache")
@@ -41,8 +41,9 @@ export async function build(
       .withMountedCache("/app/node_modules", client.cacheVolume("node_modules"))
       .withDirectory("/app", context, { exclude })
       .withWorkdir("/app")
-      .withExec(["bash", "-c", "bun install"])
-      .withExec(["bash", "-c", "bun run build"])
+      .withExec(["ls", "-ltra"])
+      .withExec(["bun", "install"])
+      .withExec(["bun", "run", "build"])
       .withExec(["cp", "-r", "/app/dist", "/dist"]);
 
     await ctr.stdout();
@@ -106,7 +107,7 @@ export async function deploy(
         "ca-certificates",
         "build-essential",
       ])
-      .withExec(["pkgx", "install", "node@18.19.0", "bun", "git"])
+      .withExec(["pkgx", "install", "node@18.19.0", "bun@1.0.0", "git"])
       .withMountedCache(
         "/root/.bun/install/cache",
         client.cacheVolume("bun-cache")
